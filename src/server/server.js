@@ -6,6 +6,7 @@ const SparkPost = require('sparkpost');
 const sparky = new SparkPost(process.env.sparkpost_key);
 
 app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({extended: false}));
 app.use(Express.static(__dirname + "/../../build/"));
 
 const PORT = process.env.PORT || 8000;
@@ -19,18 +20,18 @@ function getAppInfo(input, response) {
   .catch((error) => {throw error})
 }
 
-function sendAppEmail(userEmail, response) {
+function sendAppEmail(userEmail, app, response) {
   //const app = this.state.currApp;
   sparky.transmissions.send({
     content: {
-      from: 'testing@sparkpostbox.com',
-      subject: 'Hello, World!',
-      text: 'Testing'
-      //html:'<html><body><p>App Chosen by User is ${app.trackName}</p><p>Email of user who chose app: ${this.state.userEmail}</p></body></html>'
+      from: 'admin@rossadavis.com',
+      subject: 'App information for',
+      //text: 'Testing'
+      html:`<html><body><p>App Chosen by User is ${app.trackName}</p><p>Email of user who chose app: ${userEmail}</p></body></html>`
     },
     recipients: [
       {address: 'ross.ad@gmail.com'},
-      {address: userEmail}
+      //{address: userEmail}
     ]
   })
   .then(data => {
@@ -50,10 +51,16 @@ app.get('/appsuggest/', (req, res) => {
   getAppInfo(searchterm, res);
 })
 
-app.get('/email/', (req, res) => {
+app.post('/email/', (req, res) => {
   const email = req.headers.user_email;
+  const app = {
+    trackName: req.headers.app_name,
+    artworkUrl60: req.headers.app_img,
+    trackViewUrl: req.headers.app_link
+  }
+  console.log('post headers', req.headers);
   console.log('email address: ', email);
-  sendAppEmail(email, res);
+  sendAppEmail(email, app, res);
 })
 
 app.listen(PORT, () => {

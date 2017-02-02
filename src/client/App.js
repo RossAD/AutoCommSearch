@@ -34,7 +34,7 @@ class App extends Component {
     })
     .catch((error) => {throw error})
   }
-  
+
   renderSuggestion(suggestion) {
     return (
       <span>
@@ -70,12 +70,26 @@ class App extends Component {
   sendAppEmail(){
     const emailHeader = new Headers();
     emailHeader.append('user_email', this.state.userEmail);
-    fetch('/email/', {headers: emailHeader})
+    emailHeader.append('app_name', this.state.currApp.trackName);
+    emailHeader.append('app_img', this.state.currApp.artworkUrl60);
+    emailHeader.append('app_link', this.state.currApp.trackViewUrl);
+    emailHeader.append('Content-Type', 'application/json');
+    const appData = JSON.stringify(this.state.currApp);
+    const emailOpt = {
+      method: 'POST',
+      headers: emailHeader,
+      mode: 'cors',
+      cache: 'default',
+      body: JSON.stringify(this.state.appData)
+    }
+    fetch('/email/', emailOpt)
     .then(res => res.json())
     .then(data => {
-      if(data === 'Success'){
+      console.log('options: ', data);
+      const results = data.results.total_accepted_recipients;
+      if(results >= 1){
         this.setState({emailSent: true})
-      }    
+      }
     })
     .catch((error) => {throw error})
   }
@@ -102,9 +116,9 @@ class App extends Component {
           renderSuggestion={this.renderSuggestion}
           inputProps={inputProps}
         />
-        <Email 
+        <Email
           handleUserEmail={this.handleUserEmail}
-          sendAppEmail={this.sendAppEmail} 
+          sendAppEmail={this.sendAppEmail}
         />
       </div>
     );
