@@ -28,9 +28,9 @@ class App extends Component {
     fetch('/appsuggest/', {headers: reqHeader})
     .then(res => res.json())
     .then(data => {
-      console.log('Returned Data from server: ', data);
-      this.setState({suggestions: data.results});
+      this.setState({suggestions: data});
     })
+    .catch((error) => {throw error})
   }
   
   renderSuggestion(suggestion) {
