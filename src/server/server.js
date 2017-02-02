@@ -8,5 +8,5 @@ app.use(Express.static(__dirname + "/../../build/"));
 const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, () => {
-  console.log('Example app listening on port: ' + PORT);
+  console.log('Node server listening on port: ' + PORT);
 })

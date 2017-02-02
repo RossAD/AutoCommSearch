@@ -6,13 +6,15 @@
     "react-scripts": "0.8.5"
   },
   "dependencies": {
+    "body-parser": "^1.16.0",
     "express": "^4.14.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "sparkpost": "^2.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node ./src/server/server.js",
+    "webpack_start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
