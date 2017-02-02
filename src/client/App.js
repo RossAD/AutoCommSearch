@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import AutoSuggest from 'react-autosuggest';
 import debounce from 'debounce';
+import Email from './Email';
 
 class App extends Component {
   constructor(props) {
@@ -12,14 +13,15 @@ class App extends Component {
       searchTerm: '',
       currApp: {},
       userEmail: '',
-      }
+      emailSent: false,
+    }
 
-      this.handleUserEmail = this.handleUserEmail.bind(this);
-      this.getAppInfo = this.getAppInfo.bind(this);
-      this.debouncedGetAppInfo = debounce(this.getAppInfo, 1000);
-      this.renderSuggestion = this.renderSuggestion.bind(this);
-      this.getSuggestionValue = this.getSuggestionValue.bind(this);
-      this.sendAppEmail = this.sendAppEmail.bind(this);
+    this.handleUserEmail = this.handleUserEmail.bind(this);
+    this.getAppInfo = this.getAppInfo.bind(this);
+    this.debouncedGetAppInfo = debounce(this.getAppInfo, 1000);
+    this.renderSuggestion = this.renderSuggestion.bind(this);
+    this.getSuggestionValue = this.getSuggestionValue.bind(this);
+    this.sendAppEmail = this.sendAppEmail.bind(this);
   }
 
   getAppInfo() {
@@ -66,7 +68,16 @@ class App extends Component {
   }
 
   sendAppEmail(){
-    console.log('Future API call to server')
+    const emailHeader = new Headers();
+    emailHeader.append('user_email', this.state.userEmail);
+    fetch('/email/', {headers: emailHeader})
+    .then(res => res.json())
+    .then(data => {
+      if(data === 'Success'){
+        this.setState({emailSent: true})
+      }    
+    })
+    .catch((error) => {throw error})
   }
 
   render() {
@@ -90,6 +101,10 @@ class App extends Component {
           getSuggestionValue={this.getSuggestionValue}
           renderSuggestion={this.renderSuggestion}
           inputProps={inputProps}
+        />
+        <Email 
+          handleUserEmail={this.handleUserEmail}
+          sendAppEmail={this.sendAppEmail} 
         />
       </div>
     );

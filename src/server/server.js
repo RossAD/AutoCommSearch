@@ -2,6 +2,8 @@ const Express = require('express');
 const app = Express();
 const bodyparser = require('body-parser');
 const fetch = require('node-fetch');
+const SparkPost = require('sparkpost');
+const sparky = new SparkPost(process.env.sparkpost_key);
 
 app.use(bodyparser.json());
 app.use(Express.static(__dirname + "/../../build/"));
@@ -17,7 +19,7 @@ function getAppInfo(input, response) {
   .catch((error) => {throw error})
 }
 
-function sendAppEmail() {
+function sendAppEmail(userEmail, response) {
   //const app = this.state.currApp;
   sparky.transmissions.send({
     content: {
@@ -27,12 +29,14 @@ function sendAppEmail() {
       //html:'<html><body><p>App Chosen by User is ${app.trackName}</p><p>Email of user who chose app: ${this.state.userEmail}</p></body></html>'
     },
     recipients: [
-      {address: 'ross.ad@gmail.com'}
+      {address: 'ross.ad@gmail.com'},
+      {address: userEmail}
     ]
   })
   .then(data => {
-    console.log('Woohoo! You just sent your first mailing!');
+    console.log('Woohoo! Email successful!');
     console.log(data);
+    response.status(200).send(data);
   })
   .catch(err => {
     console.log('Whoops! Something went wrong');
@@ -44,6 +48,12 @@ app.get('/appsuggest/', (req, res) => {
   const searchterm = req.headers.searchterm;
   console.log('req body: ', req.headers.searchterm);
   getAppInfo(searchterm, res);
+})
+
+app.get('/email/', (req, res) => {
+  const email = req.headers.user_email;
+  console.log('email address: ', email);
+  sendAppEmail(email, res);
 })
 
 app.listen(PORT, () => {
