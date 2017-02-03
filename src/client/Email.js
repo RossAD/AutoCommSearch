@@ -4,20 +4,21 @@ class Email extends Component {
   render() {
     return (
       <div className='email_entry'>
-        <span>Enter your email to stay up to date</span>
-        <div className='email_input'>
+        <div className='email_send'>
           <input
+            className='email_input'
             type='email'
             autoComplete='email'
+            placeholder='Enter Email Address'
             onChange={this.props.handleUserEmail}
           />
           <input
+            className='email_button'
             type='button'
             value='Send'
             onClick={this.props.sendAppEmail}
           />
         </div>
-        <span className='email_confirm'>{this.props.emailSent ? 'Email was successful' : ''}</span>
       </div>
     )
   }

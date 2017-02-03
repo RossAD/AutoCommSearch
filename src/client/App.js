@@ -108,8 +108,14 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <Header />
+        <Header
+          emailSent={this.state.emailSent}
+        />
         <div className="search_email">
+          <Email
+            handleUserEmail={this.handleUserEmail}
+            sendAppEmail={this.sendAppEmail}
+          />
           <AutoSuggest
             suggestions={this.state.suggestions}
             onSuggestionsFetchRequested={this.onSuggestionFetchRequested}
@@ -117,11 +123,6 @@ class App extends Component {
             getSuggestionValue={this.getSuggestionValue}
             renderSuggestion={this.renderSuggestion}
             inputProps={inputProps}
-          />
-          <Email
-            handleUserEmail={this.handleUserEmail}
-            sendAppEmail={this.sendAppEmail}
-            emailSent={this.state.emailSent}
           />
         </div>
       </div>

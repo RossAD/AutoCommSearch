@@ -50,9 +50,12 @@ table {
 
 .App {
   text-align: center;
+}_
+
+.App_header {
 }
 
-.App-header {
+.App_title {
   background-color: #222;
   height: 100px;
   padding: 20px;
@@ -60,8 +63,8 @@ table {
   font-size: 45px;
 }
 
-.App-intro {
-  padding-top: 20px;
+.App_intro {
+  padding: 20px;
   font-size: 25px;
 }
 
@@ -135,7 +138,7 @@ table {
   display: flex;
   align-items: center;
   cursor: pointer;
-  padding: 10px 20px 10px 10px;
+  padding: 5px 20px 5px 10px;
 }
 
 .app_img {
@@ -159,12 +162,86 @@ table {
   flex-direction: column;
 }
 
-.email_input {
+.email_send {
   flex-direction: row;
-  padding-top: 10px;
+}
+
+.email_input {
+  width: 140px;
+  height: 20px;
+  padding: 10px 20px;
+  font-family: Helvetica, sans-serif;
+  font-weight: 300;
+  font-size: 15px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+.email_button {
+  width:50px;
+  height:30px;
+  font-weight:100;
+  border-radius:4px;
+  border:1px solid #aaa;
+  background-color: lightyellow;
+  margin: 5px;
 }
 
 .email_confirm {
+  display: block;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
   padding: 20px;
   color: red;
+}
+
+/* ===== == = === 20em - 30em (320px - 480px) === = == ===== */
+
+@media only screen and (min-width : 20em) and (max-width : 30em) {
+
+  .App_title {
+    font-size: 35px;
+    padding: 10px;
+  }
+
+  .App_intro {
+    font-size: 20px;
+    padding: 10px;
+  }
+
+  .email_confirm {
+    padding: 10px;
+  }
+
+  .search_email {
+    flex-direction: column;
+    padding: 30px;
+  }
+
+  .email_entry {
+    padding: 5px 0px 5px 0px;
+  }
+
+  .email_input {
+    width: 115px;
+    height: 10px;
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .email_button {
+    height: 20px;
+  }
+
+  .react-autosuggest__container--open .react-autosuggest__suggestions-container {
+    top: 36px;
+    max-height: 250px;
+    overflow-y: scroll;
+  }
+  .react-autosuggest__input {
+    height: 15px;
+  }
 }
