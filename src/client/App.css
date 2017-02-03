@@ -76,6 +76,19 @@ table {
   padding: 50px;
 }
 
+.loading {
+  height: 50px;
+  animation: App-logo-spin infinite 20s linear;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.not_loading {
+  display: none;
+}
 /*
  *Styling for AutoSuggest Searchbar and results
  */
@@ -226,8 +239,8 @@ table {
   }
 
   .email_input {
-    width: 115px;
-    height: 10px;
+    width: 120px;
+    height: 15px;
     padding: 5px 10px;
     font-size: 12px;
   }

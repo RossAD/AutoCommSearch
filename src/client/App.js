@@ -4,6 +4,7 @@ import AutoSuggest from 'react-autosuggest';
 import debounce from 'debounce';
 import Header from './Header';
 import Email from './Email';
+import Loader from './Loading';
 
 class App extends Component {
   constructor(props) {
@@ -15,6 +16,7 @@ class App extends Component {
       currApp: {},
       userEmail: '',
       emailSent: false,
+      loading: false,
     }
 
     this.handleUserEmail = this.handleUserEmail.bind(this);
@@ -27,12 +29,13 @@ class App extends Component {
 
   // Functions for Auto suggest
   getAppInfo() {
+    this.setState({loading: true});
     const reqHeader = new Headers();
     reqHeader.append('SearchTerm', this.state.searchTerm)
     fetch('/appsuggest/', {headers: reqHeader})
     .then(res => res.json())
     .then(data => {
-      this.setState({suggestions: data});
+      this.setState({suggestions: data, loading: false});
     })
     .catch((error) => {throw error})
   }
@@ -75,12 +78,15 @@ class App extends Component {
   }
 
   sendAppEmail(){
+    this.setState({ loading: true });
     const emailHeader = new Headers();
+
     emailHeader.append('user_email', this.state.userEmail);
     emailHeader.append('app_name', this.state.currApp.trackName);
     emailHeader.append('app_img', this.state.currApp.artworkUrl60);
     emailHeader.append('app_link', this.state.currApp.trackViewUrl);
     emailHeader.append('Content-Type', 'application/json');
+
     const emailOpt = {
       method: 'POST',
       headers: emailHeader,
@@ -94,7 +100,7 @@ class App extends Component {
       console.log('options: ', data);
       const results = data.results.total_accepted_recipients;
       if(results >= 1){
-        this.setState({emailSent: true});
+        this.setState({ emailSent: true, loading: false });
       }
     })
     .catch((error) => {throw error})
@@ -125,6 +131,7 @@ class App extends Component {
             inputProps={inputProps}
           />
         </div>
+        <Loader loading={this.state.loading} />
       </div>
     );
   }
