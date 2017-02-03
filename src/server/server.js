@@ -11,6 +11,7 @@ app.use(Express.static(__dirname + "/../../build/"));
 
 const PORT = process.env.PORT || 8000;
 
+// Fetch apps from itunes based on search term
 function getAppInfo(input, response) {
   fetch(`https://itunes.apple.com/search?term=${input}&country=us&limit=10&entity=software&media=software`)
   .then(res => res.json())
@@ -20,18 +21,26 @@ function getAppInfo(input, response) {
   .catch((error) => {throw error})
 }
 
+// Send email using SparkPost
 function sendAppEmail(userEmail, app, response) {
-  //const app = this.state.currApp;
   sparky.transmissions.send({
     content: {
       from: 'admin@rossadavis.com',
-      subject: 'App information for',
-      //text: 'Testing'
-      html:`<html><body><p>App Chosen by User is ${app.trackName}</p><p>Email of user who chose app: ${userEmail}</p></body></html>`
+      subject: 'SkillRobot.ai Code Challenge Email',
+      html:`<html>
+              <body>
+                <div>
+                  <p>App chosen by user was <img style="width:20px" src=${app.artworkUrl60} alt='app'/> ${app.trackName}</p>
+                  <p>The email of the user that chose the app is ${userEmail}</p>
+                  <p>A link to the page of the app is ${app.trackViewUrl}</p>
+                  <p>Have a nice day Matan!</p>
+                </div>
+              </body>
+            </html>`
     },
     recipients: [
-      {address: 'ross.ad@gmail.com'},
-      //{address: userEmail}
+      //{address: 'matan@skillrobot.ai'},
+      {address: userEmail}
     ]
   })
   .then(data => {
@@ -45,9 +54,9 @@ function sendAppEmail(userEmail, app, response) {
   });
 }
 
+// Endpoints for email and suggestion call
 app.get('/appsuggest/', (req, res) => {
   const searchterm = req.headers.searchterm;
-  console.log('req body: ', req.headers.searchterm);
   getAppInfo(searchterm, res);
 })
 
@@ -58,8 +67,6 @@ app.post('/email/', (req, res) => {
     artworkUrl60: req.headers.app_img,
     trackViewUrl: req.headers.app_link
   }
-  console.log('post headers', req.headers);
-  console.log('email address: ', email);
   sendAppEmail(email, app, res);
 })
 

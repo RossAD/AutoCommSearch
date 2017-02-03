@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import AutoSuggest from 'react-autosuggest';
 import debounce from 'debounce';
+import Header from './Header';
 import Email from './Email';
 
 class App extends Component {
@@ -24,6 +25,7 @@ class App extends Component {
     this.sendAppEmail = this.sendAppEmail.bind(this);
   }
 
+  // Functions for Auto suggest
   getAppInfo() {
     const reqHeader = new Headers();
     reqHeader.append('SearchTerm', this.state.searchTerm)
@@ -38,16 +40,20 @@ class App extends Component {
   renderSuggestion(suggestion) {
     return (
       <span>
-        <img src={suggestion.artworkUrl60}
+        <img
+          src={suggestion.artworkUrl60}
           alt='app'
+          className='app_img'
         />
-        {suggestion.trackName}
+        <span className='app_name'>
+          {suggestion.trackName}
+        </span>
       </span>
     )
   }
 
   getSuggestionValue(suggestion) {
-    this.setState({currApp: suggestion});
+    this.setState({currApp: suggestion, emailSent: false});
     return suggestion.trackName;
   }
 
@@ -55,16 +61,17 @@ class App extends Component {
     this.setState({searchTerm: newValue})
   )
 
-  onSuggestionFetchRequested = ({ value }) => {
-    this.debouncedGetAppInfo(value);
-  }
+  onSuggestionFetchRequested = ({ value }) => (
+    this.debouncedGetAppInfo(value)
+  )
 
   onSuggestionClearRequested = () => (
     this.setState({suggestions: []})
   )
 
+  // Functions for email
   handleUserEmail(event) {
-    this.setState({userEmail: event.target.value})
+    this.setState({userEmail: event.target.value});
   }
 
   sendAppEmail(){
@@ -74,21 +81,20 @@ class App extends Component {
     emailHeader.append('app_img', this.state.currApp.artworkUrl60);
     emailHeader.append('app_link', this.state.currApp.trackViewUrl);
     emailHeader.append('Content-Type', 'application/json');
-    const appData = JSON.stringify(this.state.currApp);
     const emailOpt = {
       method: 'POST',
       headers: emailHeader,
       mode: 'cors',
       cache: 'default',
-      body: JSON.stringify(this.state.appData)
-    }
+    };
+
     fetch('/email/', emailOpt)
     .then(res => res.json())
     .then(data => {
       console.log('options: ', data);
       const results = data.results.total_accepted_recipients;
       if(results >= 1){
-        this.setState({emailSent: true})
+        this.setState({emailSent: true});
       }
     })
     .catch((error) => {throw error})
@@ -102,24 +108,22 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <div className="App-header">
-          <h2>Autocompletion Search Bar</h2>
+        <Header />
+        <div className="search_email">
+          <AutoSuggest
+            suggestions={this.state.suggestions}
+            onSuggestionsFetchRequested={this.onSuggestionFetchRequested}
+            onSuggestionsClearRequested={this.onSuggestionClearRequested}
+            getSuggestionValue={this.getSuggestionValue}
+            renderSuggestion={this.renderSuggestion}
+            inputProps={inputProps}
+          />
+          <Email
+            handleUserEmail={this.handleUserEmail}
+            sendAppEmail={this.sendAppEmail}
+            emailSent={this.state.emailSent}
+          />
         </div>
-        <p className="App-intro">
-          Search for a mobile app you would like more information on.
-        </p>
-        <AutoSuggest
-          suggestions={this.state.suggestions}
-          onSuggestionsFetchRequested={this.onSuggestionFetchRequested}
-          onSuggestionsClearRequested={this.onSuggestionClearRequested}
-          getSuggestionValue={this.getSuggestionValue}
-          renderSuggestion={this.renderSuggestion}
-          inputProps={inputProps}
-        />
-        <Email
-          handleUserEmail={this.handleUserEmail}
-          sendAppEmail={this.sendAppEmail}
-        />
       </div>
     );
   }
