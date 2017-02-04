@@ -5,6 +5,7 @@ import debounce from 'debounce';
 import Header from './Header';
 import Email from './Email';
 import Loader from './Loading';
+import isMobile from 'ismobilejs';
 
 class App extends Component {
   constructor(props) {
@@ -127,6 +128,7 @@ class App extends Component {
             onSuggestionsFetchRequested={this.onSuggestionFetchRequested}
             onSuggestionsClearRequested={this.onSuggestionClearRequested}
             getSuggestionValue={this.getSuggestionValue}
+            focusInputOnSuggestionClick={!isMobile.any}
             renderSuggestion={this.renderSuggestion}
             inputProps={inputProps}
           />
