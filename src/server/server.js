@@ -39,7 +39,7 @@ function sendAppEmail(userEmail, app, response) {
             </html>`
     },
     recipients: [
-      {address: 'matan@skillrobot.ai'},
+      {address: 'ross.ad@gmail.com'},
       {address: userEmail}
     ]
   })
