@@ -33,7 +33,7 @@ function sendAppEmail(userEmail, app, response) {
                   <p>App chosen by user was <img style="width:20px" src=${app.artworkUrl60} alt='app'/> ${app.trackName}</p>
                   <p>The email of the user that chose the app is ${userEmail}</p>
                   <p>A link to the page of the app is ${app.trackViewUrl}</p>
-                  <p>Have a nice day Matan!</p>
+                  <p>Have a nice day!</p>
                 </div>
               </body>
             </html>`
