@@ -101,12 +101,12 @@ class App extends Component {
       console.log('options: ', data);
       const results = data.results.total_accepted_recipients;
       if(results >= 1){
-        this.setState({ 
-          emailSent: true, 
+        this.setState({
+          emailSent: true,
           loading: false,
-          userEmail: '',
-          searchTerm: '',
-        });
+          userEmail: "",
+          searchTerm: "",
+        }, function () {console.log(this.state.value);});
       }
     })
     .catch((error) => {throw error})

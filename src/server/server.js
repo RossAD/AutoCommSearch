@@ -26,7 +26,7 @@ function sendAppEmail(userEmail, app, response) {
   sparky.transmissions.send({
     content: {
       from: 'admin@rossadavis.com',
-      subject: 'SkillRobot.ai Code Challenge Email',
+      subject: 'App Search Result',
       html:`<html>
               <body>
                 <div>
@@ -39,7 +39,7 @@ function sendAppEmail(userEmail, app, response) {
             </html>`
     },
     recipients: [
-      {address: 'ross.ad@gmail.com'},
+      //{address: 'ross.ad@gmail.com'},
       {address: userEmail}
     ]
   })
