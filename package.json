@@ -19,7 +19,7 @@
     "sparkpost": "^2.1.2"
   },
   "scripts": {
-    "start": "nodemon ./src/server/server.js",
+    "start": "node ./src/server/server.js",
     "webpack_start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
