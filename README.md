@@ -46,6 +46,7 @@ Check out a deployed demo at https://autocommsearch.herokuapp.com/
 Setup basic React enviroment
 * [Node](https://nodejs.org/en/docs/) - NodeJS
 * [Express](https://expressjs.com/en/4x/api.html) - ExpressJS
+* [SparkPost](https://www.sparkpost.com/) - SparkPost Email Service
 
 ## Authors
 
